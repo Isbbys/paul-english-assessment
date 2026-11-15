@@ -1,1 +1,426 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>General English Assessment</title><style>body{font:16px system-ui;margin:3rem auto;max-width:650px;padding:1rem;color:#172033}progress{width:100%}</style></head><body><h2>Loading the English assessment…</h2><p>Please keep this page open.</p><progress></progress><script>(async()=>{try{const url='https://raw.githubusercontent.com/Isbbys/paul-english-assessment/main/assessment.html.gz.b64?'+Date.now();const r=await fetch(url,{cache:'no-store'});if(!r.ok)throw Error('Assessment file unavailable ('+r.status+').');const bytes=await r.arrayBuffer();const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));const html=await new Response(stream).text();document.open();document.write(html);document.close()}catch(e){document.body.innerHTML='<h2>Could not load assessment</h2><p>'+e.message+'</p><p>Please refresh this page shortly.</p>'}})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>General English Assessment | ESL</title>
+<style>
+:root{color-scheme:light;--bg:#f4f6fa;--card:#fff;--ink:#172033;--muted:#657087;--line:#dce2ec;--accent:#2457c5;--soft:#edf2fc;--good:#16834b;--bad:#c45137}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+main{max-width:900px;margin:auto;padding:18px}.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:17px;margin:12px 0;box-shadow:0 2px 9px #1720330a}
+h1,h2,h3,p{margin-top:0}h1{font-size:clamp(22px,4vw,32px);line-height:1.15;margin-bottom:6px}h2{font-size:21px;margin-bottom:8px}h3{font-size:16px;margin-bottom:8px}.muted{color:var(--muted)}.small{font-size:13px}.row{display:flex;justify-content:space-between;align-items:center;gap:12px}.pill{border:1px solid var(--line);border-radius:30px;padding:3px 9px;font-size:12px;white-space:nowrap}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:white;color:var(--ink);padding:10px 14px;border-radius:9px;font-weight:650}button.primary{background:var(--accent);color:white;border-color:var(--accent)}button:disabled{opacity:.4;cursor:not-allowed}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions>*{flex:1}
+input[type=text],input[type=number],textarea{font:inherit;width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--ink)}textarea{min-height:120px;resize:vertical}
+.q{padding:13px 0;border-bottom:1px solid var(--line)}.q:last-child{border-bottom:0}.q label.prompt{display:block;margin-bottom:8px}.answer{margin-top:3px}.options{display:grid;gap:7px}.options label{display:flex;gap:9px;align-items:flex-start}.options input{margin-top:5px}
+.tabs{display:flex;gap:7px;overflow:auto;padding:3px 0 9px}.tabs button{white-space:nowrap;font-size:13px}.tabs button.active{background:var(--accent);color:white;border-color:var(--accent)}
+.progress{height:8px;background:var(--line);border-radius:20px;overflow:hidden}.progress>div{height:100%;background:var(--accent)}
+table{width:100%;border-collapse:collapse;margin:8px 0;font-size:14px}td,th{border:1px solid var(--line);padding:7px;text-align:left}th{background:var(--soft)}
+.reading{white-space:pre-line;background:var(--soft);padding:14px;border-radius:10px;font-size:14px}
+details{background:var(--soft);padding:12px;border-radius:9px;margin:8px 0}summary{font-weight:650;cursor:pointer}
+[hidden]{display:none!important}.score{font-size:29px;font-weight:800}.sticky{position:sticky;top:0;z-index:5}
+#reminder{position:fixed;inset:0;background:#17203399;display:flex;align-items:center;justify-content:center;padding:18px;z-index:20}#reminder .panel{max-width:430px;width:100%;box-shadow:0 15px 50px #0003}#studentName{font-weight:700;text-decoration:underline;text-underline-offset:4px}
+@media(max-width:600px){main{padding:10px}.panel{padding:13px}.row.mobile{align-items:flex-start}.actions button{padding:9px 8px}}
+@media print{body{background:white}main{max-width:none;padding:0}.no-print,button{display:none!important}.panel{box-shadow:none;break-inside:avoid;border:1px solid #bbb}#results{display:block!important}details{break-inside:avoid} }
+
+.results-hero{display:grid;grid-template-columns:190px 1fr;gap:24px;align-items:center;margin-top:18px}
+.total-ring{--pct:0;--ring:var(--accent);width:170px;height:170px;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--pct)*1%),#e8edf5 0);display:grid;place-items:center;position:relative;margin:auto}
+.total-ring:before{content:"";position:absolute;inset:13px;background:white;border-radius:50%}
+.ring-content{position:relative;text-align:center}.ring-content strong{display:block;font-size:40px;line-height:1.1}.ring-content span{font-size:11px;letter-spacing:.08em;color:var(--muted);font-weight:700}
+.grade-heading{font-size:22px;font-weight:800;margin-bottom:14px}
+.result-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat-tile{background:#f6f8fc;border:1px solid var(--line);border-radius:12px;padding:14px}
+.stat-tile strong{display:block;font-size:25px;margin-top:3px}
+.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px;margin-top:12px}
+.section-card{display:flex;align-items:center;gap:13px;border:1px solid var(--line);border-radius:12px;padding:12px;min-width:0}
+.section-ring{--pct:0;--ring:var(--accent);width:72px;height:72px;flex:0 0 72px;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--pct)*1%),#e8edf5 0);display:grid;place-items:center;position:relative}
+.section-ring:before{content:"";position:absolute;inset:6px;background:white;border-radius:50%}
+.section-ring b{position:relative;font-size:14px}
+.section-info{min-width:0;flex:1}.section-info strong{display:block;font-size:14px;line-height:1.3}.section-info small{color:var(--muted)}
+.grade-chip{display:inline-block;margin-top:5px;font-size:11px;font-weight:750;border-radius:20px;padding:2px 8px;background:var(--soft);color:var(--accent)}
+.grade-chip.good{background:#e8f6ee;color:#16834b}.grade-chip.low{background:#fff0eb;color:#b94c31}
+@media(max-width:620px){.results-hero{grid-template-columns:1fr;gap:14px}.total-ring{width:148px;height:148px}.section-grid{grid-template-columns:1fr}}
+
+.compare-row{padding:13px 0;border-bottom:1px solid var(--line)}.compare-row:last-child{border-bottom:0}.compare-question{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:9px}.compare-question b{font-size:14px}.compare-mark{white-space:nowrap;font-size:12px;font-weight:750;border-radius:20px;padding:3px 8px;background:#fff0eb;color:#b94c31}.compare-mark.is-correct{background:#e8f6ee;color:#16834b}.compare-mark.is-partial{background:#fff7e5;color:#956300}.compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.compare-answer{border-radius:9px;padding:10px;min-width:0}.student-answer{background:#fff7f5;border:1px solid #f1d9d2}.correct-answer{background:#f0f8f3;border:1px solid #d4eadb}.compare-label{font-size:10px;letter-spacing:.06em;font-weight:800;color:var(--muted)}.compare-answer p{margin:5px 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.correction-section{background:#f7f9fc;border:1px solid var(--line);padding:12px;margin:10px 0}.correction-total{float:right;color:var(--muted);font-size:12px;font-weight:700}.rubric-note{background:var(--soft);border-left:4px solid var(--accent);border-radius:8px;padding:12px;margin-top:12px;font-size:13px}
+@media(max-width:620px){.compare-grid{grid-template-columns:1fr}.compare-question{align-items:flex-start;flex-direction:column}}
+
+
+.word-bank{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:8px 0 12px;padding:10px 12px;background:#f4f6fb;border:1px solid #dce3ef;border-radius:9px;font-size:.92rem}
+.word-bank strong{margin-right:3px;color:#34425a}
+.word-bank span{display:inline-block;padding:4px 9px;border-radius:6px;background:#fff;border:1px solid #cbd5e1;font-weight:650;color:#26354b}
+
+</style>
+</head>
+<body>
+<main>
+<section class="panel">
+ <div class="row mobile"><div><div class="small muted">ESL · SECOND-YEAR HIGH SCHOOL</div><h1>General English Assessment</h1><div class="muted">Individual student assessment</div></div><div class="pill">100 marks · 90 minutes</div></div>
+ <p class="small muted" style="margin:12px 0 0">Online examination · 90 minutes · 100 marks. Keep this page open until you submit and download your results.</p>
+</section>
+<section id="intro" class="panel">
+ <h2>Welcome to your English examination!</h2><p class="muted">Before starting, enter your full name. Complete all eight sections independently. Your answers are assessed in this browser and are not uploaded to a teacher or database. The 90-minute timer starts when you begin.</p><label for="studentNameInput"><b>Student full name</b></label><input id="studentNameInput" type="text" placeholder="Enter your full name" autocomplete="name" style="margin:8px 0 16px">
+ <table><thead><tr><th>Section</th><th>Marks</th></tr></thead><tbody>
+ <tr><td>1. Tenses</td><td>20</td></tr><tr><td>2. Irregular verbs</td><td>10</td></tr><tr><td>3. Causative forms</td><td>15</td></tr><tr><td>4. Phrasal verbs & prepositions</td><td>10</td></tr><tr><td>5. Grammar & transformations</td><td>15</td></tr><tr><td>6. Vocabulary</td><td>5</td></tr><tr><td>7. Reading comprehension</td><td>15</td></tr><tr><td>8. Writing</td><td>10</td></tr></tbody></table>
+ <button class="primary" id="start" style="width:100%">Start examination</button>
+</section>
+<section id="exam" hidden>
+ <div class="panel sticky">
+  <div class="row"><div><div class="small muted">TIME REMAINING</div><div class="score" id="clock">90:00</div></div><div style="text-align:right"><div class="small muted">ANSWERED</div><b id="answered">0 / 0</b></div></div>
+  <div class="progress"><div id="timebar" style="width:100%"></div></div>
+ </div>
+ <nav class="tabs no-print" id="tabs"></nav>
+ <section class="panel" id="questions"></section>
+ <section class="panel" id="reviewPanel" hidden></section>
+ <div class="actions no-print"><button id="prev">← Previous</button><button class="primary" id="next">Next section →</button></div>
+ <button id="submit" class="no-print" style="width:100%;margin-top:10px;border-color:var(--bad);color:var(--bad)">Submit examination</button>
+</section>
+<section id="results" hidden>
+ <div class="panel result-overview">
+  <div class="small muted">EXAMINATION SUBMITTED</div>
+  <h2>Results dashboard</h2>
+  <p class="muted">Student: <u id="resultStudentName"></u></p>
+  <p class="muted small">Automatic assessment across all eight sections. Reading and writing feedback use structured rubrics and should be reviewed by the teacher.</p>
+  <div class="results-hero">
+   <div class="total-ring" id="totalRing" style="--pct:0"><div class="ring-content"><strong id="totalPercent">—%</strong><span>OVERALL SCORE</span></div></div>
+   <div class="result-summary">
+    <div id="grade" class="grade-heading">Assessment complete</div>
+    <div class="result-stats">
+     <div class="stat-tile"><span class="small muted">Total score</span><strong id="autoScore">— / 100</strong></div>
+     <div class="stat-tile"><span class="small muted">Final score</span><strong id="finalScore">— / 100</strong></div>
+    </div>
+   </div>
+  </div>
+ </div>
+ <div class="panel"><h3>Section performance</h3><p class="small muted">Each circle fills according to the percentage achieved in that section.</p><div id="breakdown" class="section-grid"></div></div>
+ <div class="panel"><h3>Correction and answer key</h3><div id="corrections"></div></div>
+ <div class="panel"><h3>Teacher's notes</h3><textarea id="notes" placeholder="Record recurring mistakes, weak areas and recommendations..."></textarea><div class="actions no-print" style="margin-top:10px"><button id="print">Print / Save results as PDF</button><button id="export">Download results (.txt)</button></div></div>
+ <button id="restart" class="no-print" style="width:100%">Start a new examination</button>
+</section>
+<p class="small muted" id="notice" style="text-align:center">Ready to begin. This app works offline.</p>
+<div id="reminder" hidden role="dialog" aria-modal="true" aria-labelledby="reminderTitle"><div class="panel"><div class="small muted">TIME CHECK</div><h2 id="reminderTitle">30-minute reminder</h2><p id="reminderText">You have 60 minutes remaining.</p><button class="primary" id="dismissReminder" style="width:100%">Continue examination</button></div></div>
+</main>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const norm=s=>String(s??'').toLowerCase().trim().replace(/[’']/g,"'").replace(/[.!?,]/g,'').replace(/\s+/g,' ');
+const sections=[
+{name:'Tenses',max:20,ex:[
+{title:'Exercise 1 · Complete with the correct verb form (10 marks)',items:[
+['My father usually ___ to work at 7 a.m. (go)','goes',1],['Look! The children ___ football. (play)','are playing',1],['She ___ her homework yet. (not / finish)','has not finished|hasnt finished',1],['We ___ our grandparents last weekend. (visit)','visited',1],['While I ___, my brother was watching television. (study)','was studying',1],['They ___ in Niamey since 2020. (live)','have lived|have been living',1],['I think it ___ tomorrow. (rain)','will rain',1],['By the time we arrived, the film ___ already ___. (start)','had already started',1],['Listen! Someone ___ at the door. (knock)','is knocking',1],['He ___ when the electricity went off. (work)','was working',1]]},
+{title:'Exercise 2 · Identify the tense (5 marks)',items:[
+['She has been studying for three hours.','present perfect continuous',1],['They are preparing for their examination.','present continuous',1],['I bought a new dictionary yesterday.','past simple|simple past',1],['He will visit his uncle next week.','future simple|simple future',1],['The students had left before the teacher arrived.','past perfect',1]]},
+{title:'Exercise 3 · Rewrite as instructed (5 marks)',manual:true,items:[
+['She plays tennis. (Make negative)',1],['They went to school. (Make interrogative)',1],['He is reading a book. (Make negative)',1],['You have finished the exercise. (Make interrogative)',1],['I will attend the meeting. (Make negative)',1]]}]},
+{name:'Irregular verbs',max:10,ex:[
+{title:'Exercise 4 · Complete the table (6 marks)',items:[
+['Go – Past simple','went',.5],['Go – Past participle','gone',.5],['Write – Past simple','wrote',.5],['Write – Past participle','written',.5],['Eat – Past simple','ate',.5],['Eat – Past participle','eaten',.5],['See – Past simple','saw',.5],['See – Past participle','seen',.5],['Break – Past simple','broke',.5],['Break – Past participle','broken',.5],['Speak – Past simple','spoke',.5],['Speak – Past participle','spoken',.5]]},
+{title:'Exercise 5 · Choose the correct form (4 marks)',items:[
+{q:'She has ___ her homework.',opts:['did','done','do'],a:'done',m:1},{q:'I ___ him yesterday.',opts:['saw','seen','see'],a:'saw',m:1},{q:'They have ___ to Lagos twice.',opts:['went','go','gone'],a:'gone',m:1},{q:'He ___ a letter last night.',opts:['written','wrote','write'],a:'wrote',m:1}]}]},
+{name:'Causative forms',max:15,ex:[
+{title:'Exercise 6 · Complete using the correct causative form (8 marks)',items:[
+['I ___ my hair ___ yesterday. (HAVE / cut)','had my hair cut',1],['She ___ her car ___ tomorrow. (HAVE / repair)','will have her car repaired|is having her car repaired',1],['The teacher ___ the students ___ their essays. (MAKE / rewrite)','made the students rewrite',1],['My parents ___ me ___ to the party. (LET / go)','let me go',1],['We ___ a technician ___ the software. (HAVE / install)','had a technician install',1],['He ___ his brother ___ him. (GET / help)','got his brother to help',1],['They ___ their house ___ last month. (GET / paint)','got their house painted',1],['The manager ___ the employees ___ overtime. (MAKE / work)','made the employees work',1]]},
+{title:'Exercise 7 · Rewrite using the word in brackets (7 marks)',manual:true,items:[
+['A mechanic repaired my motorcycle. (HAD)',1],['The barber cut Paul’s hair. (HAD)',1],['The teacher forced the students to stay after class. (MADE)',1],['My father permitted me to use his phone. (LET)',1],['She persuaded her friend to join the club. (GOT)',1],['We arranged for a plumber to fix the tap. (HAD)',1],['Someone cleans their house every week. (HAVE)',1]]}]},
+{name:'Phrasal verbs & prepositions',max:10,ex:[
+{title:'Exercise 8 · Complete with a phrasal verb (5 marks)',items:[
+['Turn ___ the television before bed.','off',1],['She has to ___ her little sister.','look after',1],['We need to ___ the truth.','find out',1],['Never ___ when things become difficult.','give up',1],['I cannot ___ this noise anymore.','put up with',1]]},
+{title:'Exercise 9 · Complete with a preposition (5 marks)',items:[
+['Interested ___ learning English.','in',1],['Born ___ 2009.','in',1],['Good ___ mathematics.','at',1],['Waiting ___ two hours.','for',1],['Apologized ___ her mistake.','for',1]]}]},
+{name:'Grammar',max:15,ex:[
+{title:'Exercise 10 · Put the words in the correct order (5 marks)',items:[
+['every / school / goes / day / Paul / to','paul goes to school every day',1],['yesterday / bought / a / I / book / new','i bought a new book yesterday',1],['English / learning / they / are','they are learning english',1],['does / where / live / your / friend?','where does your friend live',1],['never / has / she / Paris / visited','she has never visited paris',1]]},
+{title:'Exercise 11 · Correct the mistakes (5 marks)',manual:true,items:[
+['She don’t like coffee.',1],['He go to school every day.',1],['I am agree with you.',1],['They was playing football.',1],['She has went to the market.',1]]},
+{title:'Exercise 12 · Conjunctions and comparisons (5 marks)',items:[
+['Paul likes football, ___ his brother prefers basketball.','whereas',1],['She passed the examination ___ she studied hard.','because',1],['___ he was tired, he continued working.','although',1],['This book is ___ than the previous one. (good)','better',1],['This telephone is ___ than that one. (expensive)','more expensive',1]]}]},
+{name:'Vocabulary',max:5,ex:[{title:'Exercise 13 · Choose the correct meaning (5 marks)',items:[
+{q:'Struggle means:',opts:['To have difficulty','To celebrate','To forget'],a:'To have difficulty',m:1},{q:'Improve means:',opts:['To become worse','To become better','To disappear'],a:'To become better',m:1},{q:'Independent means:',opts:['Depending on others','Able to do things without help','Being afraid'],a:'Able to do things without help',m:1},{q:'Develop means:',opts:['To grow or progress','To destroy','To stop'],a:'To grow or progress',m:1},{q:'Knowledge means:',opts:['Information and understanding','Physical strength','Money'],a:'Information and understanding',m:1}]}]},
+{name:'Reading',max:15,manual:true,ex:[
+{title:'Exercise 14 · Comprehension (5 marks)',items:[['Why did Paul struggle with English last year?',1],['What did his teacher advise him to do? Mention two activities.',2],['Why did Paul ask his parents to get him a dictionary?',1],['What does Paul understand about making mistakes?',1]]},
+{title:'Exercise 15 · True or False? Justify (5 marks)',items:[['Going to school alone guarantees success.',1],['Paul used to memorise grammar rules without understanding them.',1],['Paul now reads for thirty minutes every day.',1],['Paul has completely stopped making mistakes.',1],['His teacher encouraged him to improve his writing.',1]]},
+{title:'Exercise 16 · Vocabulary and interpretation (5 marks)',items:[['Find a word meaning the ability to continue despite difficulties.',1],['Find an expression meaning to make something better.',1],['Explain: “Success does not happen overnight.”',2],['What is the main lesson of the text?',1]]}]},
+{name:'Writing',max:10,manual:true,ex:[{title:'Exercise 17 · Written expression (10 marks)',items:[['Write 80–100 words on: “How can students improve their English language skills?” Include the importance of English, three ways to improve, difficulties students face and advice. Check grammar, vocabulary, spelling and coherence.',10,'long']]}]}
+];
+const reading=`THE POWER OF GOOD HABITS
+
+Education plays an important role in the development of individuals and societies. However, going to school alone does not guarantee success. Students must develop good learning habits and take responsibility for their education.
+
+Paul is a student who wants to improve his academic performance. Last year, he struggled with English because he did not practise regularly. He often memorised grammar rules without understanding how to use them in real situations.
+
+One day, his English teacher advised him to change his learning habits. She explained that learning a language requires patience, consistency and regular practice. She also encouraged him to read short texts, learn new vocabulary and speak English whenever possible.
+
+Paul decided to follow her advice. He now reads for thirty minutes every day and watches educational videos in English. Last week, he even asked his parents to get him a new dictionary because he wanted to learn more words.
+
+Although he still makes mistakes, he has become more confident. He understands that mistakes are a natural part of learning. His teacher also had him write a short paragraph every week to improve his writing skills.
+
+Paul has realised that success does not happen overnight. It requires effort, discipline and determination.`;
+let answers={},idx=0,remaining=5400,timer=null,submitted=false,automatic=0,studentName='',elapsed=0,reviewing=false;
+const all=()=>sections.flatMap((s,si)=>s.ex.flatMap((e,ei)=>e.items.map((it,qi)=>({s:si,e:ei,q:qi,item:it,ex:e}))));
+const key=(s,e,q)=>`${s}-${e}-${q}`;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function renderTabs(){$('tabs').innerHTML=sections.map((s,i)=>`<button data-tab="${i}" class="${i===idx?'active':''}">${i+1}. ${s.name}</button>`).join('')}
+function renderItem(it,si,ei,qi,manual){
+ const k=key(si,ei,qi),v=answers[k]||'';
+ if(Array.isArray(it)){return `<div class="q"><label class="prompt" for="a${k}">${qi+1}. ${it[0]}</label>${it[2]==='long'?`<textarea class="answer" id="a${k}" data-key="${k}" placeholder="Write your paragraph here...">${esc(v)}</textarea>`:`<input class="answer" id="a${k}" data-key="${k}" type="text" value="${esc(v)}" placeholder="Your answer">`}</div>`}
+ return `<div class="q"><div class="prompt">${qi+1}. ${it.q}</div><div class="options">${it.opts.map(o=>`<label><input type="radio" name="r${k}" class="answer" data-key="${k}" value="${esc(o)}" ${v===o?'checked':''}> ${esc(o)}</label>`).join('')}</div></div>`;
+}
+function updateProgress(){let a=all(),n=a.filter(x=>String(answers[key(x.s,x.e,x.q)]||'').trim()).length;$('answered').textContent=`${n} / ${a.length}`}
+const examples = [
+`<b>Example:</b> <i>She usually walks to school.</i> (routine = present simple)<br><b>Compare:</b> <i>She is walking to school now.</i> (happening now = present continuous)`,
+`<b>Example:</b> <i>go – went – gone</i><br>Use the past simple for a finished past action: <i>I went home yesterday.</i><br>Use the past participle with <i>have/has/had</i>: <i>I have gone home.</i>`,
+`<b>Example:</b> <i>I had my phone repaired.</i> (someone repaired it for me)<br><i>The teacher made us rewrite the sentence.</i> (made + person + base verb)<br><i>My parents let me travel.</i> (let + person + base verb)`,
+`<b>Example:</b> Phrasal verb: <i>Please turn off the light.</i><br>Preposition: <i>She is interested in English.</i>`,
+`<b>Example:</b> Word order: <i>every day / walks / Ali / to school</i> → <i>Ali walks to school every day.</i><br>Conjunction: <i>I studied because I had a test.</i><br>Comparison: <i>This book is more interesting than that one.</i>`,
+`<b>Example:</b> <i>Honest</i> means telling the truth.<br><i>Improve</i> means to become better.<br>Use context clues: <i>She practises every day, so her English improves.</i>`,
+`<b>Reading example:</b> Read the question, find the relevant sentence in the passage, then answer in your own words.<br><i>Question: Why did Sam practise daily?</i><br><i>Answer: He wanted to improve his English.</i>`,
+`<b>Writing example (short model):</b><br><i>English is important because it helps people communicate and find opportunities. Students can improve by reading short texts, listening to English and speaking every day. Some students are afraid of making mistakes, but mistakes are part of learning. They should practise regularly and ask questions.</i><br><span class="small muted">This is only a model for structure. Write your own response and respect the required 80–100 words.</span>`
+];
+const wordBanks = {
+ 'Exercise 8': ['off','look after','find out','give up','put up with','take over'],
+ 'Exercise 9': ['in','at','for','on'],
+ 'Exercise 12': ['whereas','because','although','better','more expensive','however']
+};
+function shuffledCopy(items){
+ const a=[...items];
+ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}
+ return a;
+}
+function renderWordBank(title){
+ const exercise=Object.keys(wordBanks).find(name=>title.startsWith(name));
+ if(!exercise)return '';
+ const choices=shuffledCopy(wordBanks[exercise]);
+ return `<div class="word-bank"><strong>Use the words below:</strong> ${choices.map(w=>`<span>${esc(w)}</span>`).join('')}</div>`;
+}
+function render(){let s=sections[idx];renderTabs();$('questions').innerHTML=`<div class="row"><div><div class="small muted">SECTION ${idx+1} OF 8</div><h2>${s.name}</h2></div><span class="pill">${s.max} marks</span></div><div class="example" style="background:#edf2fc;border-left:4px solid #2457c5;padding:12px 14px;border-radius:8px;margin:12px 0 16px"><div class="small" style="font-weight:750;color:#2457c5;margin-bottom:4px">LEARNING EXAMPLE · NOT AN EXAM QUESTION</div>${examples[idx]}</div>`+(idx===6?`<div class="reading">${esc(reading)}</div>`:'')+s.ex.map((e,ei)=>`<div style="margin-top:18px"><h3>${e.title}</h3>${renderWordBank(e.title)}${e.items.map((it,qi)=>renderItem(it,idx,ei,qi,e.manual)).join('')}</div>`).join('');$('prev').disabled=idx===0;$('next').textContent=idx===7?'Review answers →':'Next section →';updateProgress()}
+$('start').onclick=()=>{studentName=$('studentNameInput').value.trim();if(!studentName){alert('Please enter the student’s full name before starting.');$('studentNameInput').focus();return}$('intro').hidden=true;$('exam').hidden=false;render();timer=setInterval(()=>{remaining--;elapsed++;let m=Math.floor(remaining/60),s=remaining%60;$('clock').textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');$('timebar').style.width=(remaining/5400*100)+'%';if(elapsed===1800||elapsed===3600){$('reminderTitle').textContent=elapsed===1800?'30-minute reminder':'60-minute reminder';$('reminderText').textContent=elapsed===1800?'You have 60 minutes remaining. Keep a steady pace and check that you have answered every question.':'You have 30 minutes remaining. Start reviewing your answers and leave enough time for the writing task.';$('reminder').hidden=false}if(remaining<=0){clearInterval(timer);finish(true)}},1000);$('notice').textContent='Examination in progress.'};
+$('dismissReminder').onclick=()=>{$('reminder').hidden=true};
+$('tabs').onclick=e=>{let b=e.target.closest('[data-tab]');if(b){idx=+b.dataset.tab;render()}};
+$('questions').addEventListener('input',e=>{if(e.target.classList.contains('answer')){answers[e.target.dataset.key]=e.target.value;updateProgress()}});
+$('questions').addEventListener('change',e=>{if(e.target.classList.contains('answer')){answers[e.target.dataset.key]=e.target.value;updateProgress()}});
+function renderReview(){
+ const items=all();
+ const answered=items.filter(x=>String(answers[key(x.s,x.e,x.q)]??'').trim()!=='').length;
+ let html='<div class="row"><div><div class="small muted">BEFORE SUBMISSION</div><h2>Review your answers</h2><p class="muted small">Check your responses below. Select “Edit this section” to make changes before submitting.</p></div><span class="pill">'+answered+' / '+items.length+' answered</span></div>';
+ sections.forEach((section,si)=>{
+  let rows='';
+  section.ex.forEach((ex,ei)=>ex.items.forEach((item,qi)=>{
+   const value=String(answers[key(si,ei,qi)]??'').trim();
+   const prompt=Array.isArray(item)?item[0]:item.q;
+   rows+='<div class="q"><div class="row"><b class="small">'+(qi+1)+'. '+esc(prompt)+'</b><span class="pill">'+(value?'Answered':'Not answered')+'</span></div><p style="margin:6px 0 0;white-space:pre-wrap;overflow-wrap:anywhere">'+esc(value||'(No answer provided)')+'</p></div>';
+  }));
+  html+='<details class="correction-section" open><summary>'+(si+1)+'. '+esc(section.name)+' <span class="correction-total">'+section.max+' marks</span></summary>'+rows+'<button type="button" class="edit-section" data-edit-section="'+si+'" style="margin-top:10px">Edit this section</button></details>';
+ });
+ html+='<p class="small muted">When you are satisfied, select “Submit examination”.</p>';
+ $('reviewPanel').innerHTML=html;
+ $('reviewPanel').querySelectorAll('[data-edit-section]').forEach(btn=>btn.addEventListener('click',()=>{
+  idx=Number(btn.getAttribute('data-edit-section'));
+  reviewing=false;
+  $('tabs').hidden=false;$('questions').hidden=false;$('reviewPanel').hidden=true;$('prev').hidden=false;
+  render();
+ }));
+}
+function enterReview(){
+ reviewing=true;
+ renderReview();
+ $('tabs').hidden=true;$('questions').hidden=true;$('reviewPanel').hidden=false;
+ $('prev').hidden=true;$('next').textContent='Return to questions';
+ $('reviewPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function showExamView(){
+ reviewing=false;$('tabs').hidden=false;$('questions').hidden=false;$('reviewPanel').hidden=true;$('prev').hidden=false;
+ $('next').textContent=idx===7?'Review answers →':'Next section →';
+}
+$('prev').onclick=()=>{idx=Math.max(0,idx-1);render()};
+$('next').onclick=()=>{
+ if(reviewing){showExamView();render();return;}
+ if(idx<sections.length-1){idx++;render();return;}
+ enterReview();
+};
+const manualAnswers={
+'0-2-0':['she does not play tennis|she doesn t play tennis|she doesn\'t play tennis'],
+'0-2-1':['did they go to school'],
+'0-2-2':['he is not reading a book|he isn\'t reading a book'],
+'0-2-3':['have you finished the exercise'],
+'0-2-4':['i will not attend the meeting|i won\'t attend the meeting'],
+'2-1-0':['i had my motorcycle repaired|i had my motorcycle fixed'],
+'2-1-1':['paul had his hair cut'],
+'2-1-2':['the teacher made the students stay after class'],
+'2-1-3':['my father let me use his phone'],
+'2-1-4':['she got her friend to join the club'],
+'2-1-5':['we had a plumber fix the tap|we had the tap fixed'],
+'2-1-6':['they have their house cleaned every week|they get their house cleaned every week'],
+'4-1-0':['she doesn t like coffee|she doesn\'t like coffee'],
+'4-1-1':['he goes to school every day'],
+'4-1-2':['i agree with you'],
+'4-1-3':['they were playing football'],
+'4-1-4':['she has gone to the market']
+};
+const readingRubric={
+'6-0-0':{all:['practise','practice','regularly'],any:['did not practise','did not practice','not practise','not practice','irregular']},
+'6-0-1':{all:['read','vocabulary'],any:['speak','speaking','short texts','new words']},
+'6-0-2':{all:['learn','words'],any:['dictionary','more words','new words']},
+'6-0-3':{all:['mistakes'],any:['natural','learning','part of learning']},
+'6-1-0':{truth:['false','no'],why:['school','alone','habits','responsibility']},
+'6-1-1':{truth:['true'],why:['memorised','memorized','grammar','understanding']},
+'6-1-2':{truth:['true'],why:['thirty','30','every day','daily','reads']},
+'6-1-3':{truth:['false','no'],why:['still','mistakes','confident']},
+'6-1-4':{truth:['true'],why:['write','paragraph','writing']},
+'6-2-0':{all:['determination','perseverance']},
+'6-2-1':{all:['improve','improvement']},
+'6-2-2':{all:['time','effort'],any:['patience','consistent','overnight','does not happen immediately','takes time']},
+'6-2-3':{all:['practice','effort'],any:['discipline','determination','consistency','good habits']}
+};
+function containsAny(text,words){return words.some(w=>text.includes(w))}
+function scoreReading(k,val,mark){
+ const t=norm(val),r=readingRubric[k]; if(!t||!r)return 0;
+ if(r.truth){let truth=containsAny(t,r.truth)?0.5:0;let why=containsAny(t,r.why)?0.5:0;return truth+why}
+ let points=0;
+ if(r.all){let hits=r.all.filter(w=>t.includes(w)).length;points+=Math.min(mark,hits===r.all.length?mark:0)}
+ if(r.any&&containsAny(t,r.any))points=Math.max(points,mark);
+ if(mark===2&&r.all?.length===2){points=r.all.filter(w=>t.includes(w)).length}
+ return Math.min(mark,points)
+}
+function scoreWriting(text){
+ const t=norm(text), words=(String(text).match(/\b[\w'-]+\b/g)||[]), count=words.length;
+ if(!t)return {score:0,feedback:'No writing submitted.'};
+ let score=0,feedback=[];
+ // Content and task fulfilment: 3 marks
+ const topics=[
+  ['importance of English',['english','important','useful','communication','job','education','opportunity']],
+  ['ways to improve',['read','reading','book','text','watch','video','listen','music','speak','speaking','write','writing','vocabulary','practise','practice']],
+  ['difficulties and advice',['difficult','difficulty','problem','mistake','shy','afraid','grammar','pronunciation','should','must','regular','every day','daily']]
+ ];
+ let covered=0;topics.forEach(([name,keys])=>{if(containsAny(t,keys))covered++});
+ score+=covered;feedback.push(`Content and task fulfilment: ${covered}/3 areas covered.`);
+ // Grammar and sentence construction: 2 marks (transparent proxy)
+ const sentences=(String(text).match(/[.!?]+(?=\s|$)/g)||[]).length;
+ const hasSubjectVerb=/\b(i|you|we|they|he|she|it|students|people|english)\b[\s\S]{1,45}\b(am|is|are|was|were|have|has|had|do|does|did|can|should|must|will|need|helps|help|improves|improve|practise|practice|read|reads|speak|speaks|learn|learns)\b/i.test(String(text));
+ let grammar=0;
+ if(sentences>=4)grammar++;
+ if(hasSubjectVerb)grammar++;
+ score+=grammar;feedback.push(`Grammar and sentence construction: ${grammar}/2 (automated structural check).`);
+ // Vocabulary: 2 marks
+ const unique=new Set(words.map(w=>w.toLowerCase())).size;
+ const diversity=words.length?unique/words.length:0;
+ const vocab= (diversity>=0.45?1:0) + (words.some(w=>w.length>=8)?1:0);
+ score+=vocab;feedback.push(`Vocabulary range: ${vocab}/2 (word variety and use of longer vocabulary).`);
+ // Coherence: 2 marks
+ const connectors=['first','second','finally','also','because','however','for example','therefore','moreover','in addition','but','so'];
+ const coherence=(sentences>=5?1:0)+(containsAny(t,connectors)?1:0);
+ score+=coherence;feedback.push(`Coherence: ${coherence}/2 (sentence development and linking words).`);
+ // Spelling and punctuation: 1 mark (limited automated check)
+ const startsLower=(String(text).match(/(?:^|[.!?]\s+)[a-z]/g)||[]).length;
+ const punctuation=/[.!?]\s*$/.test(String(text).trim());
+ const mechanics=(punctuation&&startsLower===0)?1:0;
+ score+=mechanics;feedback.push(`Spelling and punctuation: ${mechanics}/1 (capitalization and final punctuation; spelling still needs teacher review).`);
+ const lengthNote=(count>=80&&count<=100)?'Word count is within the 80–100-word target.':`Word count: ${count}; target 80–100 words.`;
+ feedback.unshift(lengthNote);
+ return {score:Math.min(10,score),feedback:feedback.join(' ')};
+}
+function evaluateAll(){
+ let total=0,detail=[];
+ sections.forEach((s,si)=>{
+  let sectionScore=0;
+  s.ex.forEach((e,ei)=>e.items.forEach((it,qi)=>{
+   const k=key(si,ei,qi),val=answers[k]||'';
+   const mark=Array.isArray(it)?(typeof it[2]==='number'?it[2]:(it[1]==='long'?10:(Number(it[1])||0))):(Number(it.m)||0);
+   let got=0;
+   if(si===7){const w=scoreWriting(val);got=Number(w.score)||0;window.writingFeedback=w.feedback}
+   else if(si===6){got=Number(scoreReading(k,val,mark))||0}
+   else if(e.manual){const accepted=manualAnswers[k]||[];got=accepted.some(a=>a.split('|').map(norm).includes(norm(val)))?mark:0}
+   else {const correct=Array.isArray(it)?it[1]:it.a;got=String(correct).split('|').map(norm).includes(norm(val))?mark:0}
+   sectionScore+=Number(got)||0;
+  }));
+  sectionScore=Math.max(0,Math.min(Number(s.max)||0,sectionScore));
+  total+=sectionScore;detail.push({name:s.name,score:sectionScore,max:Number(s.max)||0});
+ });
+ return {total:Math.round(total*100)/100,detail};
+}
+function gradeLabel(score){return score>=90?'Excellent':score>=75?'Good':score>=60?'Satisfactory':score>=50?'Needs improvement':'Needs significant reinforcement'}
+function finish(auto=false){
+ if(submitted)return;
+ if(!auto&&!confirm('Submit the examination now? You cannot change answers afterwards.'))return;
+ submitted=true;clearInterval(timer);$('exam').hidden=true;$('results').hidden=false;
+ studentName=$('studentNameInput').value.trim();$('resultStudentName').textContent=studentName;
+ const result=evaluateAll();automatic=Number(result.total)||0;
+ $('autoScore').textContent=automatic.toFixed(1).replace(/\\.0$/,'')+' / 100';
+ $('finalScore').textContent=automatic.toFixed(1).replace(/\\.0$/,'')+' / 100';
+ $('totalPercent').textContent=Math.round(automatic)+'%';
+ $('totalRing').style.setProperty('--pct',Math.max(0,Math.min(100,automatic)));
+ $('totalRing').style.setProperty('--ring',automatic>=75?'#16834b':automatic<50?'#c45137':'#2457c5');
+ $('grade').textContent=gradeLabel(automatic);
+ drawBreakdown(result.detail);drawCorrections();
+ $('notice').textContent=auto?'Time is up. Examination submitted.':'Examination submitted.';
+}
+$('submit').onclick=()=>finish(false);
+const answerKey=[
+['Tenses','Exercise 1: goes; are playing; has not finished; visited; was studying; have lived / have been living; will rain; had already started; is knocking; was working. Exercise 2: present perfect continuous; present continuous; past simple; future simple; past perfect. Exercise 3: She does not play tennis. / Did they go to school? / He is not reading a book. / Have you finished the exercise? / I will not attend the meeting.'],
+['Irregular verbs','went/gone; wrote/written; ate/eaten; saw/seen; broke/broken; spoke/spoken. Exercise 5: done; saw; gone; wrote.'],
+['Causative forms','had my hair cut; will have her car repaired; made the students rewrite; let me go; had a technician install; got his brother to help; got their house painted; made the employees work. Exercise 7: I had my motorcycle repaired. / Paul had his hair cut. / The teacher made the students stay after class. / My father let me use his phone. / She got her friend to join the club. / We had a plumber fix the tap. / They have their house cleaned every week.'],
+['Phrasal verbs & prepositions','turn off; look after; find out; give up; put up with. Prepositions: in; in; at; for; for.'],
+['Grammar','Paul goes to school every day. / I bought a new book yesterday. / They are learning English. / Where does your friend live? / She has never visited Paris. Corrections: She doesn’t like coffee. / He goes to school every day. / I agree with you. / They were playing football. / She has gone to the market. Conjunctions/comparisons: whereas; because; although; better; more expensive.'],
+['Vocabulary','To have difficulty; to become better; able to do things without help; to grow or progress; information and understanding.'],
+['Reading','1. He did not practise regularly. 2. Read short texts, learn vocabulary, speak English. 3. He wanted to learn more words. 4. Mistakes are a natural part of learning. T/F: False, True, True, False, True. Vocabulary: determination; improve. Interpretation: success takes time and consistent effort. Main lesson: discipline, effort and regular practice.'],
+['Writing','Use rubric: content/relevance 3; grammar/tenses 2; vocabulary 2; coherence/sentence construction 2; spelling/punctuation 1. Accept relevant original responses.']
+];
+function drawBreakdown(detail){
+ $('breakdown').innerHTML=detail.map(s=>{
+  const pct=s.max?Math.max(0,Math.min(100,(Number(s.score)||0)/s.max*100)):0;
+  const color=pct>=75?'#16834b':pct<50?'#c45137':'#2457c5';
+  const chip=pct>=75?'good':pct<50?'low':'';
+  return `<div class="section-card"><div class="section-ring" style="--pct:${pct};--ring:${color}"><b>${Math.round(pct)}%</b></div><div class="section-info"><strong>${s.name}</strong><small>${Number(s.score||0).toFixed(1).replace(/\\.0$/,'')} / ${s.max} marks</small><br><span class="grade-chip ${chip}">${gradeLabel(pct)}</span></div></div>`;
+ }).join('')+`<p class="small muted" style="grid-column:1/-1">Writing rubric: ${window.writingFeedback||'No writing feedback available.'}</p>`;
+}
+const readingAnswers={
+ '6-0-0':'He struggled because he did not practise regularly.',
+ '6-0-1':'His teacher advised him to read short texts, learn new vocabulary and speak English whenever possible. (Any two.)',
+ '6-0-2':'He wanted to learn more words.',
+ '6-0-3':'He understood that mistakes are a natural part of learning.',
+ '6-1-0':'False. Going to school alone does not guarantee success; students must develop good habits and take responsibility.',
+ '6-1-1':'True. He memorised grammar rules without understanding how to use them in real situations.',
+ '6-1-2':'True. He reads for thirty minutes every day.',
+ '6-1-3':'False. He still makes mistakes, although he has become more confident.',
+ '6-1-4':'True. His teacher had him write a short paragraph every week.',
+ '6-2-0':'Determination.',
+ '6-2-1':'Improve.',
+ '6-2-2':'It means success takes time and does not happen immediately; it requires patience and consistent effort.',
+ '6-2-3':'The main lesson is that progress requires effort, discipline, determination and regular practice.'
+};
+function correctAnswer(x){
+ const k=key(x.s,x.e,x.q),it=x.item;
+ if(x.s===7)return 'There is no single correct answer. A strong response should be 80–100 words and cover: the importance of English; at least three ways to improve; difficulties students face; and practical advice. Use the writing rubric below.';
+ if(x.s===6)return readingAnswers[k]||'See the reading passage and answer key.';
+ if(manualAnswers[k])return manualAnswers[k].map(v=>v.split('|')[0]).join(' / ');
+ if(Array.isArray(it))return String(it[1]??'—').split('|').join(' / ');
+ return String(it.a??'—').split('|').join(' / ');
+}
+function awardedMarks(x){
+ const k=key(x.s,x.e,x.q),it=x.item,val=String(answers[k]||'').trim();
+ const max=Array.isArray(it)?(typeof it[2]==='number'?it[2]:(it[1]==='long'?10:(Number(it[1])||0))):(Number(it.m)||0);
+ if(!val)return 0;
+ if(x.s===7)return Number(scoreWriting(val).score)||0;
+ if(x.s===6)return Number(scoreReading(k,val,max))||0;
+ if(manualAnswers[k])return manualAnswers[k].some(a=>a.split('|').map(norm).includes(norm(val)))?max:0;
+ const correct=Array.isArray(it)?it[1]:it.a;
+ return String(correct).split('|').map(norm).includes(norm(val))?max:0;
+}
+function drawCorrections(){
+ const groups=sections.map((section,si)=>{
+  const items=section.ex.flatMap((ex,ei)=>ex.items.map((item,qi)=>({s:si,e:ei,q:qi,item,ex})));
+  const rows=items.map(x=>{
+   const k=key(x.s,x.e,x.q),student=String(answers[k]||'').trim(),correct=correctAnswer(x),earned=awardedMarks(x);
+   const max=Array.isArray(x.item)?(typeof x.item[2]==='number'?x.item[2]:(x.item[1]==='long'?10:(Number(x.item[1])||0))):(Number(x.item.m)||0);
+   const ok=earned>=max&&max>0,partial=earned>0&&!ok;
+   const status=ok?'Correct':partial?'Partially correct':'Needs correction';
+   return `<div class="compare-row"><div class="compare-question"><b>${x.q+1}. ${esc(Array.isArray(x.item)?x.item[0]:x.item.q)}</b><span class="compare-mark ${ok?'is-correct':partial?'is-partial':'is-wrong'}">${status} · ${earned}/${max} marks</span></div><div class="compare-grid"><div class="compare-answer student-answer"><span class="compare-label">STUDENT'S ANSWER</span><p>${esc(student||'(No answer provided)')}</p></div><div class="compare-answer correct-answer"><span class="compare-label">CORRECT ANSWER / EXPECTED RESPONSE</span><p>${esc(correct)}</p></div></div></div>`;
+  }).join('');
+  const total=items.reduce((a,x)=>a+awardedMarks(x),0);
+  return `<details class="correction-section"><summary>${si+1}. ${esc(section.name)} <span class="correction-total">${total.toFixed(1).replace(/\.0$/,'')} / ${section.max} marks</span></summary>${rows}</details>`;
+ }).join('');
+ $('corrections').innerHTML=groups+`<div class="rubric-note"><b>Writing assessment:</b> There is no single model answer. Compare the student's paragraph with the task requirements and the rubric: content/relevance (3), grammar/tenses (2), vocabulary (2), coherence/sentence construction (2), spelling/punctuation (1). Automated writing feedback is only a guide and should be reviewed by the teacher.</div>`;
+}
+$('print').onclick=()=>window.print();
+$('export').onclick=()=>{let result=evaluateAll();let out='GENERAL ENGLISH ASSESSMENT RESULTS\nStudent: '+studentName+'\n\nAUTOMATIC SCORE: '+result.total+'/100\n\nSECTION BREAKDOWN\n'+result.detail.map(s=>`${s.name}: ${s.score}/${s.max}`).join('\n')+'\n\nWRITING FEEDBACK\n'+(window.writingFeedback||'')+'\n\nTEACHER NOTES\n'+$('notes').value+'\n\nANSWERS\n'+all().map(x=>`${sections[x.s].name} – ${x.item[0]||x.item.q}\n${answers[key(x.s,x.e,x.q)]||'(blank)'}`).join('\n\n');let blob=new Blob([out],{type:'text/plain'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=studentName.replace(/[^a-z0-9_-]+/gi,'_')+'-English-Assessment-Results.txt';a.click();URL.revokeObjectURL(url)};
+$('restart').onclick=()=>{if(confirm('Start a new examination? Current answers will be cleared.'))location.reload()};
+})();
+</script>
+</body></html>
