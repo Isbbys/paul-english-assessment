@@ -1,15 +1,31 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>General English Assessment</title><style>body{font:16px system-ui;margin:3rem auto;max-width:650px;padding:1rem;color:#172033}progress{width:100%}</style></head><body><h2>Loading the English assessment…</h2><p>Please keep this page open.</p><progress></progress><script>(async()=>{try{const r=await fetch('./assessment.html.gz.b64');if(!r.ok)throw Error('Unable to load assessment file ('+r.status+')');const encoded=(await r.text()).trim(),binary=atob(encoded),bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));const stream=new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));let html=await new Response(stream).text();
-const css='.results-hero{display:grid;grid-template-columns:190px 1fr;gap:24px;align-items:center}.total-ring{--pct:0;--ring:#2457c5;width:170px;height:170px;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--pct)*1%),#e8edf5 0);display:grid;place-items:center;position:relative;margin:auto}.total-ring:before{content:"";position:absolute;inset:13px;background:white;border-radius:50%}.ring-content{position:relative;text-align:center}.ring-content strong{display:block;font-size:38px;line-height:1.1}.ring-content span{font-size:12px;color:#657087}.result-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stat-tile{background:#f6f8fc;border:1px solid #dce2ec;border-radius:11px;padding:12px}.stat-tile strong{display:block;font-size:22px}.section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.section-card{display:flex;align-items:center;gap:12px;border:1px solid #dce2ec;border-radius:12px;padding:12px;min-width:0}.section-ring{--pct:0;--ring:#2457c5;width:66px;height:66px;flex:0 0 66px;border-radius:50%;background:conic-gradient(var(--ring) calc(var(--pct)*1%),#e8edf5 0);display:grid;place-items:center;position:relative}.section-ring:before{content:"";position:absolute;inset:6px;background:white;border-radius:50%}.section-ring b{position:relative;font-size:13px}.section-info{min-width:0;flex:1}.section-info strong{display:block;font-size:14px}.section-info small{color:#657087}.grade-chip{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;border-radius:20px;padding:2px 8px;background:#edf2fc;color:#2457c5}.grade-chip.good{background:#e8f6ee;color:#16834b}.grade-chip.low{background:#fff0eb;color:#b94c31}@media(max-width:620px){.results-hero{grid-template-columns:1fr;gap:14px}.total-ring{width:145px;height:145px}.section-grid{grid-template-columns:1fr}}';
-html=html.replace('</style>',css+'</style>');
-const dashboard='<div class="panel"><div class="small muted">EXAMINATION SUBMITTED</div><h2>Results dashboard</h2><p class="muted">Student: <u id="resultStudentName"></u></p><p class="muted small">Results are assessed automatically. Reading and writing feedback use structured rubrics and should be reviewed by the teacher.</p><div class="results-hero"><div class="total-ring" id="totalRing" style="--pct:0"><div class="ring-content"><strong id="totalPercent">—%</strong><span>OVERALL SCORE</span></div></div><div><p id="grade" style="font-size:20px;font-weight:800;margin:0 0 12px">Awaiting result</p><div class="result-stats"><div class="stat-tile"><span class="small muted">Automatic score</span><strong id="autoScore">— / 100</strong></div><div class="stat-tile"><span class="small muted">Final score</span><strong id="finalScore">— / 100</strong></div></div></div></div></div><div class="panel"><h3>Section performance</h3><p class="small muted">Each circle shows the percentage achieved in that section.</p><div id="breakdown" class="section-grid"></div></div>';
-let start=html.indexOf('<div class="panel"><div class="small muted">EXAMINATION SUBMITTED');
-let end=html.indexOf('<div class="panel"><h3>Correction and answer key',start);
-if(start>=0&&end>start)html=html.slice(0,start)+dashboard+html.slice(end);
-let a=html.indexOf('function evaluateAll(){'),b=html.indexOf('\\nfunction finish(',a);
-if(a>=0&&b>a)html=html.slice(0,a)+`function evaluateAll(){let total=0,detail=[];sections.forEach((s,si)=>{let sectionScore=0;s.ex.forEach((e,ei)=>e.items.forEach((it,qi)=>{const k=key(si,ei,qi),val=answers[k]||'',rawMark=Array.isArray(it)?(it[2]==='long'?10:(e.manual?it[1]:it[2])):it.m,mark=Number(rawMark)||0;let got=0;if(si===7){const w=scoreWriting(val);got=Number(w.score)||0;window.writingFeedback=w.feedback}else if(si===6){got=Number(scoreReading(k,val,mark))||0}else if(e.manual){const accepted=manualAnswers[k]||[];got=accepted.some(x=>x.split('|').map(norm).includes(norm(val)))?mark:0}else{const correct=Array.isArray(it)?it[1]:it.a;got=String(correct).split('|').map(norm).includes(norm(val))?mark:0}sectionScore+=Number(got)||0}));sectionScore=Math.max(0,Math.min(Number(s.max)||0,Number(sectionScore)||0));total+=sectionScore;detail.push({name:s.name,score:sectionScore,max:Number(s.max)||0})});return{total:Math.round(total*100)/100,detail}};`+html.slice(b);
-a=html.indexOf('function finish(');b=html.indexOf("$('submit').onclick",a);
-if(a>=0&&b>a)html=html.slice(0,a)+`function gradeFor(p){return p>=90?'Excellent':p>=75?'Good':p>=60?'Satisfactory':p>=50?'Needs improvement':'Needs significant reinforcement'}function finish(auto=false){if(submitted)return;if(!auto&&!confirm('Submit the examination now? You cannot change answers afterwards.'))return;submitted=true;clearInterval(timer);$('exam').hidden=true;$('results').hidden=false;studentName=$('studentNameInput').value.trim();$('resultStudentName').textContent=studentName;const result=evaluateAll();automatic=Number(result.total)||0;$('autoScore').textContent=automatic.toFixed(1).replace(/\\.0$/,'')+' / 100';$('finalScore').textContent=automatic.toFixed(1).replace(/\\.0$/,'')+' / 100';$('totalPercent').textContent=Math.round(automatic)+'%';$('totalRing').style.setProperty('--pct',Math.max(0,Math.min(100,automatic)));$('grade').textContent=gradeFor(automatic);drawBreakdown(result.detail);drawCorrections();$('notice').textContent=auto?'Time is up. Examination submitted.':'Examination submitted.'}\n`+html.slice(b);
-a=html.indexOf('function drawBreakdown(');b=html.indexOf('function drawCorrections()',a);
-if(a>=0&&b>a)html=html.slice(0,a)+`function drawBreakdown(detail){$('breakdown').innerHTML=detail.map(s=>{const pct=s.max?Math.max(0,Math.min(100,(Number(s.score)||0)/s.max*100)):0,color=pct>=75?'#16834b':pct<50?'#c45137':'#2457c5',chip=pct>=75?'good':pct<50?'low':'';return '<div class="section-card"><div class="section-ring" style="--pct:'+pct+';--ring:'+color+'"><b>'+Math.round(pct)+'%</b></div><div class="section-info"><strong>'+esc(s.name)+'</strong><small>'+(Number(s.score)||0).toFixed(1).replace(/\\.0$/,'')+' / '+s.max+' marks</small><br><span class="grade-chip '+chip+'">'+gradeFor(pct)+'</span></div></div>'}).join('')+'<p class="small muted" style="grid-column:1/-1">Writing rubric: '+esc(window.writingFeedback||'Not assessed.')+'</p>'}\n`+html.slice(b);
-document.open();document.write(html);document.close();
-}catch(e){document.body.innerHTML='<h2>Could not load assessment</h2><p>'+e.message+'</p>'}})();</script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>General English Assessment | ESL</title>
+<style>
+body{font:16px system-ui;margin:3rem auto;max-width:650px;padding:1rem;color:#172033}
+progress{width:100%}
+</style>
+</head>
+<body>
+<h2>Loading the English assessment…</h2>
+<p>Please keep this page open.</p>
+<progress></progress>
+<script>
+(async()=>{
+ try{
+  const response=await fetch('./assessment.html.gz.b64');
+  if(!response.ok) throw new Error('Unable to load assessment file ('+response.status+')');
+  const compressed=await response.arrayBuffer();
+  const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('gzip'));
+  const html=await new Response(stream).text();
+  document.open();document.write(html);document.close();
+ }catch(error){
+  document.body.innerHTML='<h2>Could not load assessment</h2><p>'+error.message+'</p><p>Please try again in a modern browser.</p>';
+ }
+})();
+</script>
+</body>
+</html>
